@@ -1,24 +1,12 @@
+from rest_framework.decorators import api_view
+from rest_framework import permissions, generics
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import permissions, status, generics
+
 from .models import CustomUser
 from .serializers import UserSerializer
+import secrets
+import string
 
-
-# class UserAPIView(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def get(self, request, *args, **kwargs):
-#         users = CustomUser.objects.all()
-#         serializer = UserSerializer(users, many=True)
-#         return Response(serializer.data)
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer = UserSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
@@ -30,3 +18,18 @@ class UserCreateView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+@api_view(['GET'])
+def generate_password(request, *args, **kwargs):
+    return Response(''.join(secrets.choice(string.digits) for _ in range(8)))
+
+
+@api_view(['GET'])
+def generate_username(request, *args, **kwargs):
+    return Response(''.join(secrets.choice(string.ascii_letters) for _ in range(6)))
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
