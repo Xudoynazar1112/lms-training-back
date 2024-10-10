@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,11 +42,8 @@ INSTALLED_APPS = [
     'api',
     "corsheaders",
     'rest_framework',
-    'rest_framework.authtoken',
     'drf_yasg',
-    'dj_rest_auth',
-    'allauth',
-    # 'allauth.account'
+    'rest_framework_simplejwt',
 ]
 
 REST_FRAMEWORK = {
@@ -55,6 +53,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
 
@@ -123,6 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLE_JWT = {
+    'ALGORITHM': 'HS256',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=120),  # Lifespan of access tokens.
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Lifespan of refresh tokens.
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
