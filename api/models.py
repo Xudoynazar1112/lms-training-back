@@ -13,3 +13,4 @@ class CustomUser(AbstractUser):
     user_roles = models.CharField(max_length=31, choices=USER_ROLES, default=STUDENT)
     photo = models.ImageField(upload_to='photos/', default='photos/default.jpg')
     phone_number = models.IntegerField(null=True, blank=True)
+    approved = models.BooleanField(default=False)
