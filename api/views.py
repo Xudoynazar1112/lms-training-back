@@ -17,7 +17,7 @@ class UserListView(generics.ListAPIView):
 class UserCreateView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 @api_view(['GET'])
@@ -30,6 +30,7 @@ def generate_username(request, *args, **kwargs):
     return Response(''.join(secrets.choice(string.ascii_letters) for _ in range(6)))
 
 
-class UserDetailView(generics.RetrieveAPIView):
+class UserDetailView(generics.RetrieveDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
